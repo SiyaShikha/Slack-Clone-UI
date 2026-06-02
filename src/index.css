@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+:root {
+  --light-purple: #663366;
+  --dark-purple: #3f0e40;
+}

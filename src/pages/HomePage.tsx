@@ -1,5 +1,11 @@
 function HomePage() {
-  return <div className="home-page">Home Page</div>;
+  return (
+    <div className="flex h-screen">
+      <main className="flex-1 p-6 bg-white">
+        <h1 className="text-3xl font-bold">Welcome</h1>
+      </main>
+    </div>
+  );
 }
 
 export default HomePage;

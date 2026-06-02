@@ -1,16 +1,19 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import LoginPage from "./pages/LoginPage";
+import AppLayout from "./components/layout/AppLayout";
 import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
-    <div>
-      <h1>Slack Clone</h1>
+    <div className="font-stretch-normal">
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/home" element={<HomePage />} />
+
+          <Route element={<AppLayout />}>
+            <Route path="/home" element={<HomePage />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </div>
