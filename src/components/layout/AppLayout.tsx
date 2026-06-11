@@ -4,7 +4,7 @@ import TopNav from "./TopNav";
 import LeftRail from "./LeftRail";
 import WorkspaceSidebar from "./WorkspaceSidebar";
 
-function AppLayout() {
+const AppLayout = () => {
   return (
     <div className="h-screen flex flex-col bg-(--dark-purple)">
       <TopNav />
@@ -19,6 +19,6 @@ function AppLayout() {
       </div>
     </div>
   );
-}
+};
 
 export default AppLayout;

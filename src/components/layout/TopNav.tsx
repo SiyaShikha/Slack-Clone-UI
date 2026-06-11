@@ -1,7 +1,7 @@
-function TopNav() {
+const TopNav = () => {
   return (
     <header className="h-12 grid grid-cols-3 items-center px-4">
-      <div>{/* Left side */}</div>
+      <div>Left side</div>
 
       <div className="flex justify-center gap-4 text-white">
         <input
@@ -16,6 +16,6 @@ function TopNav() {
       </div>
     </header>
   );
-}
+};
 
 export default TopNav;

@@ -4,7 +4,7 @@ import AppLayout from "./components/layout/AppLayout";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 
-function App() {
+const App = () => {
   return (
     <div className="font-stretch-normal">
       <BrowserRouter>
@@ -18,6 +18,6 @@ function App() {
       </BrowserRouter>
     </div>
   );
-}
+};
 
 export default App;

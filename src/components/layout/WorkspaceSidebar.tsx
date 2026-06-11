@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function WorkspaceSidebar() {
+const WorkspaceSidebar = () => {
   const [showChannels, setShowChannels] = useState(true);
   const [showDMs, setShowDMs] = useState(true);
 
@@ -60,6 +60,6 @@ function WorkspaceSidebar() {
       </div>
     </aside>
   );
-}
+};
 
 export default WorkspaceSidebar;
