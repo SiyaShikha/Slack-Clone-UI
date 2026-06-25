@@ -1,12 +1,44 @@
+import {
+  Headphones,
+  MessageCircle,
+  MessagesSquare,
+  NotebookTabs,
+  SquareEqual,
+} from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const WorkspaceSidebar = () => {
+  const navigate = useNavigate();
+  const channels = ["general", "engineering", "system-design"]; // get channels from API
+  const dms = ["Alice", "Bob"]; // get DMs from API
+
+  const [channelList] = useState(channels);
+  const [dmList] = useState(dms);
+
   const [showChannels, setShowChannels] = useState(true);
   const [showDMs, setShowDMs] = useState(true);
 
   return (
-    <aside className="w-96 border-r p-4 bg-(--light-purple) text-white rounded-tl-lg">
+    <aside className="w-80 border-r p-4 bg-(--light-purple) text-white rounded-tl-lg">
       <h1 className="mb-4">Workspace</h1>
+
+      <div className="mb-6">
+        <button className="mb-2 flex items-center gap-2 w-full group">
+          <MessageCircle size={18} />
+          Threads
+        </button>
+        <button className="mb-2 flex items-center gap-2 w-full group">
+          <Headphones size={18} />
+          Huddles
+        </button>
+        <button className="mb-2 flex items-center gap-2 w-full group">
+          <NotebookTabs size={18} />
+          Directories
+        </button>
+      </div>
+
+      <hr className="mb-6" />
 
       <div className="mb-6">
         <button
@@ -17,6 +49,7 @@ const WorkspaceSidebar = () => {
             {showChannels ? "▾" : "▸"}
           </span>
 
+          <SquareEqual size={18} />
           <span>Channels</span>
 
           <span className="ml-auto flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -27,9 +60,16 @@ const WorkspaceSidebar = () => {
 
         {showChannels && (
           <ul className="space-y-2 ml-4">
-            <li># general</li>
-            <li># engineering</li>
-            <li># system-design</li>
+            {channelList.map((channel, index) => (
+              <li key={index}>
+                <button
+                  className="hover:bg-white/10 px-2 py-1 rounded w-full text-left"
+                  onClick={() => navigate(`/channel/${channel}`)}
+                >
+                  # {channel}
+                </button>
+              </li>
+            ))}
           </ul>
         )}
       </div>
@@ -43,6 +83,7 @@ const WorkspaceSidebar = () => {
             {showDMs ? "▾" : "▸"}
           </span>
 
+          <MessagesSquare size={18} />
           <span>Direct Messages</span>
 
           <span className="ml-auto flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -53,8 +94,9 @@ const WorkspaceSidebar = () => {
 
         {showDMs && (
           <ul className="space-y-2 ml-4">
-            <li>Alice</li>
-            <li>Bob</li>
+            {dmList.map((dm, index) => (
+              <li key={index}>{dm}</li>
+            ))}
           </ul>
         )}
       </div>
