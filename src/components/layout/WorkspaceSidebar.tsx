@@ -24,15 +24,24 @@ const WorkspaceSidebar = () => {
       <h1 className="mb-4">Workspace</h1>
 
       <div className="mb-6">
-        <button className="mb-2 flex items-center gap-2 w-full group">
+        <button
+          onClick={() => navigate("/threads")}
+          className="hover:bg-white/10 px-1 py-1 rounded mb-2 flex items-center gap-2 w-full group"
+        >
           <MessageCircle size={18} />
           Threads
         </button>
-        <button className="mb-2 flex items-center gap-2 w-full group">
+        <button
+          onClick={() => navigate("/huddles")}
+          className="hover:bg-white/10 px-1 py-1 rounded mb-2 flex items-center gap-2 w-full group"
+        >
           <Headphones size={18} />
           Huddles
         </button>
-        <button className="mb-2 flex items-center gap-2 w-full group">
+        <button
+          onClick={() => navigate("/directories")}
+          className="hover:bg-white/10 px-1 py-1 rounded mb-2 flex items-center gap-2 w-full group"
+        >
           <NotebookTabs size={18} />
           Directories
         </button>
