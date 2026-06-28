@@ -5,16 +5,17 @@ import {
   NotebookTabs,
   SquareEqual,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CreateChannelModal from "../CreateChannelModal";
+import { createChannel, fetchChannels } from "../../services/channelService";
+import type { Channel } from "../../types/Channel";
 
 const WorkspaceSidebar = () => {
   const navigate = useNavigate();
-  const initialChannels = ["general", "engineering", "system-design"]; // get channels from API
   const dms = ["Alice", "Bob"]; // get DMs from API
 
-  const [channelList, setChannelList] = useState(initialChannels);
+  const [channelList, setChannelList] = useState<Channel[]>([]);
   const [dmList] = useState(dms);
 
   const [showChannels, setShowChannels] = useState(true);
@@ -22,20 +23,49 @@ const WorkspaceSidebar = () => {
   const [showChannelMenu, setShowChannelMenu] = useState(false);
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [newChannelName, setNewChannelName] = useState("");
+  const [isChannelsLoading, setIsChannelsLoading] = useState(true);
+  const [channelError, setChannelError] = useState<string | null>(null);
 
-  const handleCreateChannel = () => {
+  useEffect(() => {
+    const loadChannels = async () => {
+      try {
+        setIsChannelsLoading(true);
+        setChannelError(null);
+        const channels = await fetchChannels();
+        setChannelList(channels);
+      } catch (error) {
+        console.error("Failed to load channels", error);
+        setChannelError("Unable to load channels right now.");
+      } finally {
+        setIsChannelsLoading(false);
+      }
+    };
+
+    void loadChannels();
+  }, []);
+
+  const handleCreateChannel = async () => {
     const channelName = newChannelName.trim();
 
     if (!channelName) {
       return;
     }
 
-    setChannelList((prev) =>
-      prev.includes(channelName) ? prev : [...prev, channelName],
-    );
-    setNewChannelName("");
-    setShowCreateChannelModal(false);
-    setShowChannelMenu(false);
+    try {
+      const createdChannelName = await createChannel(channelName);
+      setChannelList((prev) =>
+        prev.includes(createdChannelName)
+          ? prev
+          : [...prev, createdChannelName],
+      );
+      setNewChannelName("");
+      setShowCreateChannelModal(false);
+      setShowChannelMenu(false);
+      setChannelError(null);
+    } catch (error) {
+      console.error("Failed to create channel", error);
+      setChannelError("Unable to create the channel right now.");
+    }
   };
 
   return (
@@ -124,23 +154,34 @@ const WorkspaceSidebar = () => {
         </div>
 
         {showChannels && (
-          <ul className="space-y-2 ml-4">
-            {channelList.map((channel, index) => (
-              <li key={`${channel}-${index}`}>
-                <button
-                  className="hover:bg-white/10 px-2 py-1 rounded w-full text-left"
-                  onClick={() => navigate(`/channel/${channel}`)}
-                >
-                  # {channel}
-                </button>
-              </li>
-            ))}
-          </ul>
+          <div className="ml-4">
+            {isChannelsLoading && (
+              <p className="text-sm text-white/80">Loading channels...</p>
+            )}
+            {channelError && (
+              <p className="text-sm text-red-200">{channelError}</p>
+            )}
+
+            {!isChannelsLoading && !channelError && (
+              <ul className="space-y-2">
+                {channelList.map((channel, index) => (
+                  <li key={`${channel.id}-${index}`}>
+                    <button
+                      className="hover:bg-white/10 px-2 py-1 rounded w-full text-left"
+                      onClick={() => navigate(`/channel/${channel.name}`)}
+                    >
+                      # {channel.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         )}
       </div>
 
       <div>
-        <button
+        <div
           onClick={() => setShowDMs(!showDMs)}
           className="mb-2 flex items-center gap-2 w-full group"
         >
@@ -155,7 +196,7 @@ const WorkspaceSidebar = () => {
             <button className="hover:bg-white/10 px-1 rounded">+</button>
             <button className="hover:bg-white/10 px-1 rounded">⋮</button>
           </span>
-        </button>
+        </div>
 
         {showDMs && (
           <ul className="space-y-2 ml-4">
